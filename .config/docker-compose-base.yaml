@@ -1,7 +1,7 @@
 services:
   grafana:
     user: root
-    container_name: 'opslogix-llmscomtest-app'
+    container_name: 'opslogix-aiassistant-app'
 
     build:
       context: .
@@ -13,16 +13,13 @@ services:
     ports:
       - 3000:3000/tcp
     volumes:
-      - ../dist:/var/lib/grafana/plugins/opslogix-llmscomtest-app
+      - ../dist:/var/lib/grafana/plugins/opslogix-aiassistant-app
       - ../provisioning:/etc/grafana/provisioning
-      - ..:/root/opslogix-llmscomtest-app
+      - ..:/root/opslogix-aiassistant-app
 
     environment:
       NODE_ENV: development
-      GF_LOG_FILTERS: plugin.opslogix-llmscomtest-app:debug
+      GF_LOG_FILTERS: plugin.opslogix-aiassistant-app:debug
       GF_LOG_LEVEL: debug
       GF_DATAPROXY_LOGGING: 1
-      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: opslogix-llmscomtest-app
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
-      # GF_INSTALL_PLUGINS: grafana-llm-app
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: opslogix-aiassistant-app

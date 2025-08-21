@@ -12,8 +12,6 @@ ENV DEV "${development}"
 
 # Make it as simple as possible to access the grafana instance for development purposes
 # Do NOT enable these settings in a public facing / production grafana instance
-ENV GF_SECURITY_ADMIN_USER=admin
-ENV GF_SECURITY_ADMIN_PASSWORD=admin
 ENV GF_AUTH_ANONYMOUS_ORG_ROLE "Admin"
 ENV GF_AUTH_ANONYMOUS_ENABLED "${anonymous_auth_enabled}"
 ENV GF_AUTH_BASIC_ENABLED "false"
