@@ -1,0 +1,29 @@
+{
+  "name": "Grafana Plugin Development",
+  "dockerFile": "Dockerfile", // Referencing a custom Dockerfile
+  "context": "..", // If your project is inside another folder, adjust accordingly
+  "forwardPorts": [
+    3000
+  ], // Forward port if necessary (Grafana default port)
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.go", // Go extension
+        "ms-vscode.vscode-node-azure-pack", // Node.js extension
+        "dbaeumer.vscode-eslint", // ESLint extension for JS/TS
+        "esbenp.prettier-vscode" // Prettier extension
+      ],
+      "settings": {
+        "go.toolsManagement.autoUpdate": true,
+        "go.useLanguageServer": true
+      }
+    }
+  },
+  // "postCreateCommand": "npm install", // Automatically install dependencies after container setup
+  "remoteUser": "root", // Ensure that VSCode works with the right user permissions
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "latest"
+    }
+  }
+}

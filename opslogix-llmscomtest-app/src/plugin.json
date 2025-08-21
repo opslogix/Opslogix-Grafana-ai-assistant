@@ -1,0 +1,76 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "app",
+  "name": "LLMSCOMTEST",
+  "id": "opslogix-llmscomtest-app",
+  "preload": true,
+  "info": {
+    "keywords": [
+      "app"
+    ],
+    "description": "",
+    "author": {
+      "name": "Opslogix"
+    },
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "extensions": {
+    "addedLinks": [
+      {
+        "extensionPointId": "grafana/dashboard/panel/menu/v1",
+        "targets": ["grafana/dashboard/panel/menu"],
+        "type": "link",
+        "title": "SCOM LLM Extension",
+        "description": "SCOM LLM Extension description"
+      }
+    ]
+  },
+  "includes": [
+    {
+      "type": "page",
+      "name": "Page One",
+      "path": "/a/%PLUGIN_ID%/one",
+      "addToNav": true,
+      "defaultNav": true
+    },
+    {
+      "type": "page",
+      "name": "Page Two",
+      "path": "/a/%PLUGIN_ID%/two",
+      "addToNav": true,
+      "defaultNav": false
+    },
+    {
+      "type": "page",
+      "name": "Page Three",
+      "path": "/a/%PLUGIN_ID%/three",
+      "addToNav": true,
+      "defaultNav": false
+    },
+    {
+      "type": "page",
+      "name": "Page Four",
+      "path": "/a/%PLUGIN_ID%/four",
+      "addToNav": true,
+      "defaultNav": false
+    },
+    {
+      "type": "page",
+      "icon": "cog",
+      "name": "Configuration",
+      "path": "/plugins/%PLUGIN_ID%",
+      "role": "Admin",
+      "addToNav": true
+    }
+  ],
+  "dependencies": {
+    "grafanaDependency": "12.1.0",
+    "plugins": []
+  }
+}
