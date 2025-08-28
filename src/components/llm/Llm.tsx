@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 import { scan } from 'rxjs/operators';
 import { llm } from '@grafana/llm';
-import { Button, Input, Spinner, Stack, Box, ScrollContainer } from '@grafana/ui';
+import { Button, Input, Spinner, Stack, Box } from '@grafana/ui';
 import { flushSync } from 'react-dom';
 
 interface LlmProps {
@@ -103,7 +103,7 @@ const Llm = (props: LlmProps) => {
 
     return (
         <Stack direction={'column'}>
-            <ScrollContainer>
+            <div style={{ overflow: 'auto', maxHeight: '100%' }}>
                 <Box flex={1} padding={2} width={"100%"}>
                     <Stack direction="column" gap={4}>
                         {
@@ -148,7 +148,7 @@ const Llm = (props: LlmProps) => {
                         </Button>
                     </Stack>
                 </Box>
-            </ScrollContainer>
+            </div>
         </Stack>
     );
 };
