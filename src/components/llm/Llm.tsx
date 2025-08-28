@@ -93,8 +93,9 @@ const Llm = (props: LlmProps) => {
         setMessages(prev => [...prev, userMessage]);
 
         ask(content);
-    }, [props.context, ask]);
-    
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.context]);
+
     if (error) {
         console.error(error);
         return <></>;
