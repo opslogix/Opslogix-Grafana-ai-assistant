@@ -93,8 +93,8 @@ const Llm = (props: LlmProps) => {
         setMessages(prev => [...prev, userMessage]);
 
         ask(content);
-    }, [props.context]);
-
+    }, [props.context, ask]);
+    
     if (error) {
         console.error(error);
         return <></>;
