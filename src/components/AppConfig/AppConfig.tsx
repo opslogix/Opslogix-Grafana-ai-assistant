@@ -3,106 +3,86 @@ import { lastValueFrom } from 'rxjs';
 import { css } from '@emotion/css';
 import { AppPluginMeta, GrafanaTheme2, PluginConfigPageProps, PluginMeta } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
-import { Button, Field, FieldSet, Input, SecretInput, useStyles2 } from '@grafana/ui';
+import { Button, Field, FieldSet, Input, useStyles2 } from '@grafana/ui';
 import { testIds } from '../testIds';
 
 type AppPluginSettings = {
-  apiUrl?: string;
+  systemPrompt?: string;
+  payloadRegex?: string;
 };
 
 type State = {
-  // The URL to reach our custom API.
-  apiUrl: string;
-  // Tells us if the API key secret is set.
-  isApiKeySet: boolean;
-  // A secret key for our custom API.
-  apiKey: string;
+  systemPrompt: string;
+  payloadRegex: string;
 };
 
-export interface AppConfigProps extends PluginConfigPageProps<AppPluginMeta<AppPluginSettings>> {}
+export interface AppConfigProps extends PluginConfigPageProps<AppPluginMeta<AppPluginSettings>> { }
 
 const AppConfig = ({ plugin }: AppConfigProps) => {
   const s = useStyles2(getStyles);
-  const { enabled, pinned, jsonData, secureJsonFields } = plugin.meta;
+  const { enabled, pinned, jsonData } = plugin.meta;
   const [state, setState] = useState<State>({
-    apiUrl: jsonData?.apiUrl || '',
-    apiKey: '',
-    isApiKeySet: Boolean(secureJsonFields?.apiKey),
+    systemPrompt: jsonData?.systemPrompt || 'You are a helpful assistant with deep knowledge of System Center Operations Manager, Grafana, telemetry and monitoring. When given a grafana dashboard panel json string you are able to explain what telemetry it is and what it represents.',
+    payloadRegex: jsonData?.payloadRegex || ''
   });
 
-  const isSubmitDisabled = Boolean(!state.apiUrl || (!state.isApiKeySet && !state.apiKey));
-
-  const onResetApiKey = () =>
-    setState({
-      ...state,
-      apiKey: '',
-      isApiKeySet: false,
-    });
+  const isSubmitDisabled = Boolean(!state.systemPrompt);
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
-      [event.target.name]: event.target.value.trim(),
+      [event.target.name]: event.target.value,
     });
+
+    console.log(state);
   };
 
   const onSubmit = () => {
     if (isSubmitDisabled) {
       return;
     }
-
     updatePluginAndReload(plugin.meta.id, {
       enabled,
       pinned,
       jsonData: {
-        apiUrl: state.apiUrl,
+        systemPrompt: state.systemPrompt,
+        payloadRegex: state.payloadRegex
       },
-      // This cannot be queried later by the frontend.
-      // We don't want to override it in case it was set previously and left untouched now.
-      secureJsonData: state.isApiKeySet
-        ? undefined
-        : {
-            apiKey: state.apiKey,
-          },
     });
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={(e) => { e.preventDefault(); onSubmit() }}>
       <FieldSet label="API Settings">
-        <Field label="API Key" description="A secret key for authenticating to our custom API">
-          <SecretInput
-            width={60}
-            id="config-api-key"
-            data-testid={testIds.appConfig.apiKey}
-            name="apiKey"
-            value={state.apiKey}
-            isConfigured={state.isApiKeySet}
-            placeholder={'Your secret API key'}
-            onChange={onChange}
-            onReset={onResetApiKey}
-          />
-        </Field>
-
-        <Field label="API Url" description="" className={s.marginTop}>
+        <Field label="System Prompt" description="A prompt given to the AI Assistant">
           <Input
             width={60}
-            name="apiUrl"
-            id="config-api-url"
-            data-testid={testIds.appConfig.apiUrl}
-            value={state.apiUrl}
-            placeholder={`E.g.: http://mywebsite.com/api/v1`}
+            id="config-system-prompt"
+            data-testid={testIds.appConfig.systemPrompt}
+            name="systemPrompt"
+            value={state.systemPrompt}
+            placeholder={'Your AI Assistant prompt'}
             onChange={onChange}
           />
         </Field>
-
+        <Field label="Payload Regex" description="A regular expression to apply to the content payload when describing a dashboard. This can significantly reduce response times">
+          <Input
+            width={60}
+            id="config-payload-regex"
+            data-testid={testIds.appConfig.payloadRegex}
+            name="payloadRegex"
+            value={state.payloadRegex}
+            placeholder={''}
+            onChange={onChange}
+          />
+        </Field>
         <div className={s.marginTop}>
           <Button type="submit" data-testid={testIds.appConfig.submit} disabled={isSubmitDisabled}>
-            Save API settings
+            Save settings
           </Button>
         </div>
-      </FieldSet>
-    </form>
+      </FieldSet >
+    </form >
   );
 };
 

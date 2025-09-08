@@ -1,7 +1,9 @@
 export const testIds = {
   appConfig: {
-    apiKey: 'data-testid ac-api-key',
-    apiUrl: 'data-testid ac-api-url',
+    systemPrompt: 'data-testid ac-system-prompt',
+    payloadRegex: 'data-testid ac-payload-regex',
+    // apiKey: 'data-testid ac-api-key',
+    // apiUrl: 'data-testid ac-api-url',
     submit: 'data-testid ac-submit-form',
   },
   pageOne: {

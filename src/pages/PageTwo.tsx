@@ -4,6 +4,7 @@ import { PluginPage } from '@grafana/runtime';
 import Llm from 'components/llm/Llm';
 
 function PageTwo() {
+
   return (
     <PluginPage>
       <div data-testid={testIds.pageTwo.container}>
