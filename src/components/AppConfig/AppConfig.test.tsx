@@ -30,9 +30,9 @@ describe('Components/AppConfig', () => {
     // @ts-ignore - We don't need to provide `addConfigPage()` and `setChannelSupport()` for these tests
     render(<AppConfig plugin={plugin} query={props.query} />);
 
-    expect(screen.queryByRole('group', { name: /api settings/i })).toBeInTheDocument();
-    expect(screen.queryByTestId(testIds.appConfig.systemPrompt)).toBeInTheDocument();
-    // expect(screen.queryByTestId(testIds.appConfig.apiUrl)).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /save api settings/i })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: /api settings/i })).toBeInTheDocument();
+    expect(screen.getByTestId(testIds.appConfig.systemPrompt)).toBeInTheDocument();
+    expect(screen.getByTestId(testIds.appConfig.payloadRegex)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /save settings/i })).toBeInTheDocument();
   });
 });
