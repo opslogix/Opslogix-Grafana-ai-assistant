@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-// import { useAsyncFn } from 'react-use';
+import React, { useState } from 'react';
 import { scan } from 'rxjs/operators';
 import { llm } from '@grafana/llm';
 import { Button, Input, Spinner, Stack, Box, ScrollContainer } from '@grafana/ui';
-// import { flushSync } from 'react-dom';
 import { usePluginContext } from '@grafana/data';
 
 interface LlmProps {
@@ -58,8 +56,6 @@ const tools: Tool[] = [{
 }]
 
 const Llm = (props: LlmProps) => {
-
-    const scrollRef = useRef<HTMLDivElement>(null);
 
     const pluginSettings = usePluginContext();
     const systemMessage = `${pluginSettings?.meta?.jsonData?.systemPrompt}` || 'You are a helpful assistant with deep knowledge telemetry and monitoring in general. When given a grafana dashboard panel json string you are able to explain what telemetry it is and what it represents.';
@@ -153,19 +149,9 @@ const Llm = (props: LlmProps) => {
         })
     }
 
-    useEffect(() => {
-        const el = scrollRef.current;
-        if (el) {
-            console.log('scroll')
-            el.scrollTop = el.scrollHeight;
-        }
-
-        console.log('current messages ue', currentMessages)
-    }, [currentMessages])
-
     return (
         <Stack direction={'column'}>
-            <ScrollContainer ref={scrollRef}>
+            <ScrollContainer>
                 <Box flex={1} padding={2} width={"100%"}>
                     <Stack direction="column" gap={4}>
                         {
@@ -215,11 +201,5 @@ const Llm = (props: LlmProps) => {
         </Stack>
     );
 };
-// {
-//     messages.filter((m) => m.role != 'system' && messages.indexOf(m) != messages.length - 1).map((msg) => (
-//         <pre style={{ border: 'none' }}>{msg.role}: {msg.content}</pre>
-//     ))
-// }
-// <pre style={{ border: 'none' }}>{loading ? <Spinner /> : reply}</pre>
 
 export default Llm;
