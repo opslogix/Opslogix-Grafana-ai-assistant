@@ -89,8 +89,6 @@ const Llm = (props: LlmProps) => {
             return;
         }
 
-        // console.log('MESSAGES', messages);
-
         let tempContent = '';
         let toolCalls: ToolCall[];
 
@@ -103,8 +101,6 @@ const Llm = (props: LlmProps) => {
             .pipe(
                 scan((acc, delta) => {
                     const chunk = delta as any;
-                    // console.log('delta', delta);
-
                     const content = chunk.choices[0]?.delta?.content ?? '';
                     tempContent = acc + content;
                     toolCalls = chunk.choices[0].delta?.tool_calls;
@@ -112,19 +108,15 @@ const Llm = (props: LlmProps) => {
                 }, '')
             )
 
-        //Next is for streaming the response
-        //Complete is adding the whole reply to the messages
         stream.subscribe({
             error: (e) => console.log('stream_error', e),
             next: (v) => {
-                // console.log('stream_next', v)
                 if (v && v !== '') {
                     setLoading(false);
                     setReply(v);
                 }
             },
             complete: async () => {
-                // console.log('stream_complete', toolCalls);
                 if (toolCalls) {
                     const toolCallMsg: Message = {
                         role: 'assistant',
@@ -151,39 +143,37 @@ const Llm = (props: LlmProps) => {
 
     return (
         <Stack direction={'column'}>
-            <ScrollContainer>
-                <Box flex={1} padding={2} width={"100%"}>
-                    <Stack direction="column" gap={4}>
-                        {
-                            currentMessages.filter((m) => m.role !== 'system' && m.role !== 'tool').map(msg => (
-                                <Stack
-                                    key={currentMessages.indexOf(msg)}
-                                    direction="row"
-                                    justifyContent={msg.role === 'user' ? 'flex-end' : 'flex-start'}
-                                    gap={1}
+            <Box flex={1} padding={2} width={"100%"}>
+                <Stack direction="column" gap={4}>
+                    {
+                        currentMessages.filter((m) => m.role !== 'system' && m.role !== 'tool').map(msg => (
+                            <Stack
+                                key={currentMessages.indexOf(msg)}
+                                direction="row"
+                                justifyContent={msg.role === 'user' ? 'flex-end' : 'flex-start'}
+                                gap={1}
+                            >
+                                <Box
+                                    padding={2}
+                                    alignItems={'flex-end'}
+                                    backgroundColor={msg.role === 'user' ? 'secondary' : 'primary'}
+                                    maxWidth={'70%'}
                                 >
-                                    <Box
-                                        padding={2}
-                                        alignItems={'flex-end'}
-                                        backgroundColor={msg.role === 'user' ? 'secondary' : 'primary'}
-                                        maxWidth={'70%'}
-                                    >
-                                        <pre style={{ border: 'none', backgroundColor: 'inherit', font: 'inherit', margin: 0, padding: 0 }}>{msg.content ?? ''}</pre>
-                                    </Box>
-                                </Stack>
-                            ))}
-                        <Stack
-                            direction="row"
-                            justifyContent={'flex-start'}
-                            gap={1}>
-                            <Box>
-                                {loading ? <Spinner /> : <pre style={{ border: 'none', backgroundColor: 'inherit', font: 'inherit', margin: 0, padding: 0 }}>{reply}</pre>}
-                            </Box>
-                        </Stack>
-                    </Stack>
-                </Box>
+                                    <pre style={{ border: 'none', backgroundColor: 'inherit', font: 'inherit', margin: 0, padding: 0 }}>{msg.content ?? ''}</pre>
+                                </Box>
+                            </Stack>
+                        ))}
 
-            </ScrollContainer>
+                    <Stack
+                        direction="row"
+                        justifyContent={'flex-start'}
+                        gap={1}>
+                        <Box>
+                            {loading ? <Spinner /> : <pre style={{ border: 'none', backgroundColor: 'inherit', font: 'inherit', margin: 0, padding: 0 }}>{reply}</pre>}
+                        </Box>
+                    </Stack>
+                </Stack>
+            </Box>
             <Box>
                 <Stack direction="row" gap={4}>
                     <Input
