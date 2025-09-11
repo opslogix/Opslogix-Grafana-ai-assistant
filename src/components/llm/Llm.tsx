@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { scan } from 'rxjs/operators';
 import { llm } from '@grafana/llm';
-import { Button, Input, Spinner, Stack, Box, ScrollContainer } from '@grafana/ui';
+import { Button, Input, Spinner, Stack, Box } from '@grafana/ui';
 import { usePluginContext } from '@grafana/data';
 
 interface LlmProps {
@@ -132,10 +132,8 @@ const Llm = (props: LlmProps) => {
                     await chat([...messages, toolCallMsg, toolResultMsg]);
                 } else {
                     setLoading(false);
-
-                    //Add final assistant response
-                    setMessages([...messages, { role: 'assistant', content: tempContent }]);
                     setReply('');
+                    setMessages([...messages, { role: 'assistant', content: tempContent }]);
                 }
             }
         })
