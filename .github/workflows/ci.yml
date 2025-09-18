@@ -5,10 +5,12 @@ on:
     branches:
       - master
       - main
+      - vincent-dev
   pull_request:
     branches:
       - master
       - main
+      - vincent-dev
 
 jobs:
   build:
