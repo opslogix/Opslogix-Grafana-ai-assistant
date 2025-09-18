@@ -72,7 +72,9 @@ const Llm = (props: LlmProps) => {
   const [loading, setLoading] = useState(false);
 
   const onUserChat = async (message: string) => {
-    if (!message) return;
+    if (!message) {
+      return;
+    }
 
     setInput('');
     setReply('');
@@ -213,7 +215,11 @@ const Llm = (props: LlmProps) => {
           <Input
             disabled={loading}
             value={input}
-            onKeyDown={(e) => (e.key === 'Enter' ? onUserChat(input) : undefined)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onUserChat(input);
+              }
+            }}
             onChange={(e) => setInput(e.currentTarget.value)}
             placeholder="Enter a message"
           />
@@ -225,6 +231,5 @@ const Llm = (props: LlmProps) => {
     </Stack>
   );
 };
-
 
 export default Llm;
